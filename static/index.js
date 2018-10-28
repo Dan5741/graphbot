@@ -1,11 +1,17 @@
 $(function () {
+dataz = new FormData()
+dataz.append('hello','yo')
+dataz.append('yolo','yah')
     $.ajax({
         type:'POST',
-        url:'http://localhost:5000/webhook',
-        data:JSON.stringify({result:'hello',action:'yo'}),
-        enctype:JSON,
+        url:'http://localhost:5000/send',
+        data:dataz,
+	processData: false,
+	contentType:false,
         success:function(data){
             console.log(data)
+source = 'data:image/jpeg;base64,' + data
+$("#hello").attr('src',source)
         }
     })
     $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b> What type of chart? </div> </div>')
