@@ -1,0 +1,26 @@
+#inner{
+    min-height:500px;
+    max-height:500px;
+    overflow: auto;
+    
+}
+#chat{
+    border:2px solid black;
+    margin-top:25px;
+    border-radius:5px;
+
+}
+#input_text{
+    width:100%;
+}
+#sendbtn{
+   
+   width:100%;
+}
+#sendrow{
+    border-top:1px black solid;
+    margin-bottom:5px;
+}
+.sendcol{
+    margin-top:10px;
+}
