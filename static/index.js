@@ -1,12 +1,13 @@
 $(function () {
 dataz = new FormData()
 
-sub1 = 'firefox,2,3,4,5,2,3,4,2,3'
-sub2 = 'safari,4,6,3,2,3,4,2,3,4'
+sub1 = 'firefox,25'
+sub2 = 'safari,75'
 main = sub1 + ':' + sub2
 
 dataz.append('title','yo')
 dataz.append('data',main)
+dataz.append('type','pie')
     $.ajax({
         type:'POST',
         url:'http://localhost:5000/send',

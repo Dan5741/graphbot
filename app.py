@@ -38,6 +38,56 @@ def Barchart (title,data):
 	return imgstring
 
 
+def Linechart (title,data):
+	line_chart = pygal.Line()
+	line_chart.title = title
+
+	data_cols = data.split(':')
+	for x in range(0,len(data_cols)):
+		data_num = []
+		data_cols_split = data_cols[x].split(',')
+		
+
+		for y in range(1,len(data_cols_split)):	
+			print(data_cols_split[y])
+			data_num.append(int(data_cols_split[y]))
+			
+			print(data_num)
+		line_chart.add(str(data_cols_split[0]), data_num)
+	
+
+
+	line_chart.render_to_png('linechart.png')
+	with open("linechart.png", "rb") as imageFile:
+		imgstring = base64.b64encode(imageFile.read())
+	return imgstring
+
+def Pie (title,data):
+	pie_chart = pygal.Pie()
+	pie_chart.title = title
+
+	data_cols = data.split(':')
+	for x in range(0,len(data_cols)):
+		data_num = []
+		data_cols_split = data_cols[x].split(',')
+		
+
+		for y in range(1,len(data_cols_split)):	
+			print(data_cols_split[y])
+			data_num.append(int(data_cols_split[y]))
+			
+			print(data_num)
+		pie_chart.add(str(data_cols_split[0]), data_num)
+	
+
+
+	pie_chart.render_to_png('pie.png')
+	with open("pie.png", "rb") as imageFile:
+		imgstring = base64.b64encode(imageFile.read())
+	return imgstring
+
+
+
 
 
 
@@ -53,8 +103,18 @@ def index():
 @app.route('/send',methods=['POST'])
 def sendchart():
 
-	return Barchart(request.form['title'],request.form['data'])
+	if request.form['type'] == 'barchart':
 
+		return Barchart(request.form['title'],request.form['data'])
+
+
+	elif request.form['type'] == 'linechart':
+		
+		return Linechart(request.form['title'],request.form['data'])
+
+	elif request.form['type'] == 'pie':
+		
+		return Pie(request.form['title'],request.form['data'])
 	
 	
 	
