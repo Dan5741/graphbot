@@ -11,12 +11,31 @@ import base64
 
 
 
-line_chart = pygal.Bar()
-line_chart.title = 'Browser usage evolution (in %)'
-line_chart.x_labels = map(str, range(2002, 2013))
-line_chart.add('Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-line_chart.render_to_png('barchart.png')
 
+
+def Barchart (title,data):
+
+	bar_chart = pygal.Bar()
+	bar_chart.title = title
+	data_cols = data.split(':')
+	for x in range(0,len(data_cols)):
+		data_num = []
+		data_cols_split = data_cols[x].split(',')
+		
+
+		for y in range(1,len(data_cols_split)):	
+			print(data_cols_split[y])
+			data_num.append(int(data_cols_split[y]))
+			
+			print(data_num)
+		bar_chart.add(str(data_cols_split[0]), data_num)
+	
+
+
+	bar_chart.render_to_png('barchart.png')
+	with open("barchart.png", "rb") as imageFile:
+		imgstring = base64.b64encode(imageFile.read())
+	return imgstring
 
 
 
@@ -32,11 +51,20 @@ def index():
 	return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/send',methods=['POST'])
-def sendgraph():
-	print(request.form['hello'])
+def sendchart():
 
-	with open("barchart.png", "rb") as imageFile:
-		imgstring = base64.b64encode(imageFile.read())
-	return imgstring
+	return Barchart(request.form['title'],request.form['data'])
+
+	
+	
+	
+
+
+
+
+
+	
+	
+	
 
 
