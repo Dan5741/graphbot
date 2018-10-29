@@ -127,7 +127,7 @@ else if (int ==5)
 {
   $.ajax({
         type:'POST',
-        url:'http://localhost:5000/send',
+        url:'https://coai.herokuapp.com/send',
         data:inputs,
   processData: false,
   contentType:false,
