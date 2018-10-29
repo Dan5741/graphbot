@@ -7,7 +7,9 @@ import pygal
 import cairocffi
 import cairosvg
 import base64
-
+from flask_cors import CORS
+app = Flask(__name__)
+CORS(app)
 
 
 
@@ -21,15 +23,15 @@ def Barchart (title,data):
 	for x in range(0,len(data_cols)):
 		data_num = []
 		data_cols_split = data_cols[x].split(',')
-		
 
-		for y in range(1,len(data_cols_split)):	
+
+		for y in range(1,len(data_cols_split)):
 			print(data_cols_split[y])
 			data_num.append(int(data_cols_split[y]))
-			
+
 			print(data_num)
 		bar_chart.add(str(data_cols_split[0]), data_num)
-	
+
 
 
 	bar_chart.render_to_png('barchart.png')
@@ -46,15 +48,15 @@ def Linechart (title,data):
 	for x in range(0,len(data_cols)):
 		data_num = []
 		data_cols_split = data_cols[x].split(',')
-		
 
-		for y in range(1,len(data_cols_split)):	
+
+		for y in range(1,len(data_cols_split)):
 			print(data_cols_split[y])
 			data_num.append(int(data_cols_split[y]))
-			
+
 			print(data_num)
 		line_chart.add(str(data_cols_split[0]), data_num)
-	
+
 
 
 	line_chart.render_to_png('linechart.png')
@@ -70,15 +72,15 @@ def Pie (title,data):
 	for x in range(0,len(data_cols)):
 		data_num = []
 		data_cols_split = data_cols[x].split(',')
-		
 
-		for y in range(1,len(data_cols_split)):	
+
+		for y in range(1,len(data_cols_split)):
 			print(data_cols_split[y])
 			data_num.append(int(data_cols_split[y]))
-			
+
 			print(data_num)
 		pie_chart.add(str(data_cols_split[0]), data_num)
-	
+
 
 
 	pie_chart.render_to_png('pie.png')
@@ -103,28 +105,15 @@ def index():
 @app.route('/send',methods=['POST'])
 def sendchart():
 
-	if request.form['type'] == 'barchart':
+	if request.form['type'] == 'bar':
 
 		return Barchart(request.form['title'],request.form['data'])
 
 
-	elif request.form['type'] == 'linechart':
-		
+	elif request.form['type'] == 'line':
+
 		return Linechart(request.form['title'],request.form['data'])
 
 	elif request.form['type'] == 'pie':
-		
+
 		return Pie(request.form['title'],request.form['data'])
-	
-	
-	
-
-
-
-
-
-	
-	
-	
-
-
