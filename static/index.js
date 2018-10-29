@@ -7,6 +7,7 @@ inputs = new FormData()
 logic = 0;
 categories = 0;
 dataz = ''
+type = ''
 
 
 /////
@@ -25,6 +26,8 @@ $(document).on('click', '#sendbtn', () => {
 
       if (logic == 0)
       {
+        console.log($("#input_text").val())
+        type = $("#input_text").val()
         inputs.append('type',$("#input_text").val())
         first = 'no'
         user_input()
@@ -34,54 +37,30 @@ $(document).on('click', '#sendbtn', () => {
 
       else if (logic == 1 )
       {
+        console.log($("#input_text").val())
         inputs.append('title',$("#input_text").val())
         user_input()
-        questions(2)
-        logic ++
-      }
-      else if (logic ==2)
-      {
-        categories = $("#input_text").val() -1
-        user_input()
-        questions(3)
-        logic ++
-
-      }
-      else if (logic == 3)
-      {
-        if (dataz == '')
+        if (type == 'bar' || type =='line')
         {
-          dataz = $("#input_text").val()
-
+          questions(2)
         }
-        else{
-          dataz = dataz + ':' + $("#input_text").val()
-
-        }
-        user_input()
-        questions(4)
-        logic ++
-      }
-      else if (logic == 4)
-      {
-        if (categories > 0)
+        else if(type=='pie')
         {
-          categories = categories - 1
-          logic = logic - 1
-          dataz = dataz + ',' + $("#input_text").val()
-          user_input()
           questions(3)
         }
-        else if (categories == 0)
-        {
-          dataz = dataz + ',' + $("#input_text").val()
-          user_input()
 
-          inputs.append('data',dataz)
-          questions(5)
-
-        }
+        logic ++
       }
+      else if (logic == 2)
+      {
+        console.log($("#input_text").val())
+        inputs.append('data',$("#input_text").val())
+        user_input()
+
+        questions(4)
+      }
+
+
 
 
 
@@ -113,21 +92,18 @@ else if (int == 1)
 }
 else if (int == 2)
 {
-  $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b>How many categories?</div> </div>')
+  $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b>Please enter the data in the following format Category,1,2,3:Category,1,2,3</div> </div>')
 }
 else if (int == 3)
 {
-  $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b>What is the name of the category?</div> </div>')
+  $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b>Please enter the data in the following format Category,23:Category,65</div> </div>')
 }
-else if (int == 4)
-{
-  $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b>Enter the data of the category separated by commas</div> </div>')
-}
-else if (int ==5)
+
+else if (int ==4)
 {
   $.ajax({
         type:'POST',
-        url:'https://coai.herokuapp.com/send',
+        url:'http://localhost:5000/send',
         data:inputs,
   processData: false,
   contentType:false,
@@ -140,6 +116,7 @@ else if (int ==5)
   logic = 0;
   categories = 0;
   dataz = ''
+  type =''
   var objDiv = document.getElementById("inner");
   objDiv.scrollTop = objDiv.scrollHeight;
         }
@@ -157,12 +134,5 @@ user_input = ()=>{
   $("#input_text").val('')
   var objDiv = document.getElementById("inner");
   objDiv.scrollTop = objDiv.scrollHeight;
-
-}
-
-
-category_logic = ()=>{
-
-
 
 }

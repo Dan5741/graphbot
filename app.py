@@ -19,6 +19,7 @@ def Barchart (title,data):
 
 	bar_chart = pygal.Bar()
 	bar_chart.title = title
+
 	data_cols = data.split(':')
 	for x in range(0,len(data_cols)):
 		data_num = []
@@ -29,7 +30,7 @@ def Barchart (title,data):
 			print(data_cols_split[y])
 			data_num.append(int(data_cols_split[y]))
 
-			print(data_num)
+
 		bar_chart.add(str(data_cols_split[0]), data_num)
 
 
@@ -104,7 +105,9 @@ def index():
 
 @app.route('/send',methods=['POST'])
 def sendchart():
-
+	print(request.form['type'])
+	print(request.form['title'])
+	print(request.form['data'])
 	if request.form['type'] == 'bar':
 
 		return Barchart(request.form['title'],request.form['data'])
