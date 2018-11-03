@@ -1,4 +1,5 @@
 var user = {id:0}
+var urlz ='http://localhost:5000'
 $(function () {
 // first question:
 $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b>What type of chart?  </div> </div>')
@@ -41,7 +42,7 @@ else if (first ='no')
   $.ajax({
         type:'POST',
         data: logs,
-        url:'http://localhost:5000/sendout',
+        url:urlz +'/sendout',
         processData: false,
         contentType:false,
         success:function(data){
@@ -103,7 +104,7 @@ unique_identifier = ()=>{
   replacement = new FormData()
   $.ajax({
         type:'POST',
-        url:'http://localhost:5000/getid',
+        url:urlz+'/getid',
         data:replacement,
         processData: false,
         contentType:false,
@@ -123,7 +124,7 @@ unique_identifier = ()=>{
                 type:'POST',
                 data: logs,
                 async:false,
-                url:'http://localhost:5000/sendout',
+                url:urlz+'/sendout',
                 processData: false,
                 contentType:false,
 
