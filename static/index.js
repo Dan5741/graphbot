@@ -1,3 +1,4 @@
+var user = {id:0}
 $(function () {
 // first question:
 $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b>What type of chart?  </div> </div>')
@@ -5,7 +6,9 @@ $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </
 
 //global
 var initial = 'yes'
-var id;
+
+var first = 'yes'
+var logs = new FormData()
 
 
 //
@@ -19,31 +22,52 @@ $(document).keypress(function(e) {
 
 // press send button
 $(document).on('click', '#sendbtn', () => {
-
+console.log(first)
 if (first == 'yes')
 {
   unique_identifier()
-  logs = new FormData()
-  logs.append('id',id)
-  logs.append('user_input',$("#input_text").val())
-  user_input()
-  send_data()
+  first ='no'
+
+
 
 }
 else if (first ='no')
 {
-
-  logs = new FormData()
-  logs.append('id',id)
+  console.log('wtf')
+  console.log(user.id)
+  logs.append('id',user.id)
   logs.append('user_input',$("#input_text").val())
   user_input()
-  send_data()
+  $.ajax({
+        type:'POST',
+        data: logs,
+        url:'http://localhost:5000/sendout',
+        processData: false,
+        contentType:false,
+        success:function(data){
+          console.log(data)
+
+
+          if (data.length > 200)
+          {
+            source = 'data:image/jpeg;base64,' + data
+            $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b><img style="width:55%;height:auto;" src="'+ source +'"/></div> </div>')
+            scroll_down()
+            first = 'yes'
+
+          }
+          else if (data.length < 200)
+          {
+              $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b>'+ data +'</div> </div>')
+              scroll_down()
+          }
+
+            logs = new FormData()
+        }
+    })
 }
 
-  logs = new FormData()
-  console.log($("#input_text").val())
-  logs.append('user_input',$("#input_text").val())
-  user_input()
+
 
 
     })
@@ -76,56 +100,66 @@ user_input = ()=>{
 // unique identifier
 
 unique_identifier = ()=>{
-var id;
+  replacement = new FormData()
   $.ajax({
         type:'POST',
         url:'http://localhost:5000/getid',
-        data:logs,
+        data:replacement,
         processData: false,
         contentType:false,
+        async:false,
         error:function(error){
           console.log(error)
         },
         success:function(data){
+          user.id = data
           console.log(data)
-          id = data
+          first = 'no'
+          logs = new FormData()
+          logs.append('id',user.id)
+          logs.append('user_input',$("#input_text").val())
+          user_input()
+          $.ajax({
+                type:'POST',
+                data: logs,
+                async:false,
+                url:'http://localhost:5000/sendout',
+                processData: false,
+                contentType:false,
+
+                success:function(data){
+                  console.log(data.length)
+
+
+                  if (data.length > 200)
+                  {
+                    source = 'data:image/jpeg;base64,' + data
+                    $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b><img style="width:55%;height:auto;" src="'+ source +'"/></div> </div>')
+                    scroll_down()
+                    first = 'yes'
+                  }
+                  else if (data.length < 200)
+                  {
+                      $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b>'+ data +'</div> </div>')
+                        first = 'no'
+                      scroll_down()
+                  }
+
+                    logs = new FormData()
+                }
+            })
         }
     })
 
 }
 
 scroll_down = () =>{
-  ar objDiv = document.getElementById("inner");
+  var objDiv = document.getElementById("inner");
   objDiv.scrollTop = objDiv.scrollHeight;
 }
 
 send_data = ()=>{
 
-  $.ajax({
-        type:'POST',
-        data: logs,
-        url:'http://localhost:5000/sendout',
-        processData: false,
-        contentType:false,
-        success:function(data){
-          console.log(data)
 
-
-          if (data.length > 200)
-          {
-            source = 'data:image/jpeg;base64,' + data
-            $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b><img style="width:55%;height:auto;" src="'+ source +'"/></div> </div>')
-            scroll_down()
-            first = 'yes'
-          }
-          else if (data.length < 200)
-          {
-              $("#inner_text").append('<div class="row"> <div class="col text-left"><b>Bot: </b>'+ data +'</div> </div>')
-              scroll_down()
-          }
-
-            logs = new FormData()
-        }
-    })
 
 }
